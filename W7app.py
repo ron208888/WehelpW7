@@ -1,4 +1,5 @@
 import json
+from flask import jsonify
 from flask import Flask
 from flask import request
 from flask import redirect
@@ -136,11 +137,11 @@ def api_member():
         
         try:
             cursor.execute(changeName, (newName, originName))
-            return Response(json.dumps(success, ensure_ascii=False), mimetype = "application/json")
+            return jsonify(success)
           
         except Error as ex:
             print(ex)
-            return Response(json.dumps(fail, ensure_ascii = False), mimetype = "application/json")
+            return jsonify(fail)
 
     try:
         cursor.execute(search, (username, ))
@@ -148,12 +149,12 @@ def api_member():
      
         if result == []:
             data["data"] = None
-            return Response(json.dumps(data, ensure_ascii = False), mimetype = "application/json")
+            return jsonify(data)
         else:
             column = [index[0] for index in cursor.description]
             data_dict = [dict(zip(column, row)) for row in result]
             data["data"] = data_dict[0]
-            return Response(json.dumps(data, ensure_ascii=False), mimetype = "application/json")
+            return jsonify(data)
     
      except Error as ex:
          print(ex)
