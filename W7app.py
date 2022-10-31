@@ -5,12 +5,9 @@ from flask import redirect
 from flask import url_for
 from flask import render_template
 from flask import session
-from flask import jsonify
 from flask import Response
-import re
 import mysql.connector
 from mysql.connector import Error
-from pymysql import NULL
 
 connection = mysql.connector.connect(
      host = "localhost",
@@ -91,27 +88,7 @@ def signin():
 @app.route("/member")
 def member():
     name = session["username"]
-    getMessage = "select account,message from message"
-    cursor = connection.cursor()
-    
-    if session.permanent == False:
-            return redirect("http://127.0.0.1:3000/")
-        
-    try:
-        # cursor.execute(getMessage)
-        # result = list(reversed(cursor.fetchall()))
-        # message = "".join(map(str, result))
-        # removeStr = "('"
-        # message = "".join(x for x in message if x not in removeStr)
-        # message = message.replace(")", "\n")
-        # message = message.replace(",", ":")
-        # print(result)
-        # print(message)
-        # return render_template("member.html", name = name , message = message)
-        return render_template("member.html",name=name)
-    except Error as ex:
-        print(ex)
-    
+    return render_template("member.html",name=name)
 
 @app.route("/error")
 def error():
@@ -144,10 +121,8 @@ def message():
     
 @app.route("/api/member", methods = ["GET","PATCH"])
 def api_member():
-    print("成功")
     data = {"data":""}
     username = request.args.get("username")
-    print(f"抓到{username}")
     cursor = connection.cursor()
     search = "select id, name, account from member where account = %s"
     changeName = "update member set name = %s where account = %s"
@@ -158,38 +133,29 @@ def api_member():
         newName = change["name"]
         success = {"ok":True}
         fail = {"error":True}
-        print(change)
-        print(type(change))
-        print("patch到ㄌ")
+        
         try:
-            print("try")
-            print(newName, originName)
             cursor.execute(changeName, (newName, originName))
-            return Response(json.dumps(success, ensure_ascii=False), mimetype="application/json")
+            return Response(json.dumps(success, ensure_ascii=False), mimetype = "application/json")
+          
         except Error as ex:
             print(ex)
-            return Response(json.dumps(fail, ensure_ascii=False), mimetype="application/json")
-
-    
+            return Response(json.dumps(fail, ensure_ascii = False), mimetype = "application/json")
 
     try:
-        cursor.execute(search, (username,))
+        cursor.execute(search, (username, ))
         result = cursor.fetchall()
-        print(result)
+     
         if result == []:
             data["data"] = None
-            return Response(json.dumps(data, ensure_ascii=False), mimetype="application/json")
+            return Response(json.dumps(data, ensure_ascii = False), mimetype = "application/json")
         else:
-            column=[index[0] for index in cursor.description  ]# 列名
-            data_dict = [dict(zip(column, row)) for row in result] # row是数据库返回的一条一条记录，其中的每一天和column写成字典，最后就是字典数组
+            column = [index[0] for index in cursor.description]
+            data_dict = [dict(zip(column, row)) for row in result]
             data["data"] = data_dict[0]
-            
-            print(data)
-            print(data_dict)
-            return Response(json.dumps(data, ensure_ascii=False), mimetype="application/json")
-    except Error as ex:
-        print(ex)
-        
+            return Response(json.dumps(data, ensure_ascii=False), mimetype = "application/json")
+    
+     except Error as ex:
+         print(ex)
 
-        
 app.run(port = 3000)
