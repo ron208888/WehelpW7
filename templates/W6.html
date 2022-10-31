@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{{url_for('static',filename='W6.css')}}" />
+    <!-- <script
+      type="text/javascript"
+      src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"
+    ></script> -->
+    <title>W6作業</title>
+  </head>
+  <body>
+    <div class="interface">
+      <div class="welcome">
+        <h1>歡迎歡迎，請註冊登入系統</h1>
+      </div>
+      <div class="login">
+        <form action="/signup" method="POST">
+          <h2>註冊帳號</h2>
+          姓名<input type="text" name="Rname" /><br /><br />
+          帳號<input type="text" name="account" /><br /><br />
+          密碼<input type="text" name="passwords" /><br /><br />
+          <button>註冊</button>
+        </form>
+      </div>
+      <hr />
+      <div class="login">
+        <form action="/signin" method="POST">
+          <h2>登入系統</h2>
+          帳號<input type="text" name="name" /> <br /><br />
+          密碼<input type="text" name="password" /> <br /><br />
+          <button>登入</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

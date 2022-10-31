@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+
+    <link rel="stylesheet" href="{{url_for('static',filename='W6.css')}}" />
+    <title>登入成功</title>
+    <script>
+      function getData() {
+        const username = document.forms["form"].elements[0].value;
+        let url = `http://127.0.0.1:3000/api/member?username=${username}`;
+        fetch(url, { method: "GET" })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data);
+            if (data["data"] == null) {
+              alert("查無此會員");
+            } else {
+              let search = document.getElementById("search");
+              let result = document.createElement("div");
+              let name = data["data"]["name"];
+              let account = data["data"]["account"];
+              let searchResult = document.createTextNode(`${name}(${account})`);
+
+              result.appendChild(searchResult);
+              search.appendChild(result);
+            }
+          });
+        return false;
+      }
+
+      function change() {
+        let newName = document.forms["changeName"].elements[0].value;
+        let change = { name: newName };
+        let url = "http://127.0.0.1:3000/api/member";
+        fetch(url, { method: "Patch", body: JSON.stringify(change) })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data);
+            let change = document.getElementById("change");
+            let success = document.createElement("div");
+            let successInfo = document.createTextNode("更新成功");
+            let failInfo = document.createTextNode("更新失敗");
+            if (data["error"] == true) {
+              success.appendChild(failInfo);
+              change.appendChild(success);
+            } else {
+              success.appendChild(successInfo);
+              change.appendChild(success);
+            }
+          });
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="interface">
+      <div class="welcome">
+        <h1>歡迎{{name}}，這是會員頁</h1>
+      </div>
+      <div class="login">
+        <p>{{name}}，恭喜成功登入</p>
+        <a href="http://127.0.0.1:3000/signout">登出系統</a>
+      </div>
+
+      <hr />
+      <div class="login">
+        <form action="/message">
+          <p>快來留言ㄅ</p>
+          <input type="text" name="message" /><br /><br />
+          <button>送出</button>
+        </form>
+      </div>
+      <hr />
+      <div class="login" id="search">
+        <form name="form" onsubmit="return getData();return false;">
+          <label for="input">
+            <!-- <form
+          action="/api/member"
+          method="GET"
+          onsubmit="return getData();return false;"
+        > -->
+            <p>查詢會員姓名</p>
+            <input type="text" id="username" name="username" />
+            <button>查詢</button><br />
+          </label>
+        </form>
+      </div>
+      <div class="login" id="change">
+        <form name="changeName" onsubmit="return change();return false;">
+          <p>更新我的姓名</p>
+          <input type="text" id="newName" name="newName" />
+          <button>更新</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

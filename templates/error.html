@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{{url_for('static',filename='W6.css')}}" />
+    <title>登入失敗</title>
+  </head>
+  <body>
+    <div class="interface">
+      <div class="welcome">
+        <h1>失敗頁面</h1>
+      </div>
+      <div class="login">
+        <p>{{errortype}}</p>
+        <a href="http://127.0.0.1:3000/">回首頁</a>
+      </div>
+    </div>
+  </body>
+</html>
