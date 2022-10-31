@@ -1,0 +1,42 @@
+body {
+  background-color: darkgrey;
+}
+
+.interface {
+  margin: 0 auto;
+  max-width: 400px;
+  text-align: center;
+  outline: solid black 3px;
+}
+
+.welcome {
+  background-color: darkslateblue;
+  padding: 10px 0;
+}
+
+h1 {
+  color: white;
+}
+
+.login {
+  background-color: white;
+  padding: 10px 20px;
+}
+
+hr {
+  color: black;
+  margin: 0;
+}
+
+.square {
+  background-color: white;
+  padding: 25px 20px;
+}
+
+p {
+  font-size: larger;
+}
+
+/* .message {
+  white-space: pre-line;
+} */
